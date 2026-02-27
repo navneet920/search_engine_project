@@ -12,7 +12,7 @@ class TFIDFVectorizer:
     def __init__(self, max_features=5000):
         self.vectorizer = TfidfVectorizer(
             max_features=max_features,
-            ngram_range=(1, 2),   # unigrams + bigrams
+            ngram_range=(1, 3),   # unigrams + bigrams
             stop_words="english"
         )
         self.tfidf_matrix = None

@@ -33,6 +33,12 @@ class Preprocessor:
             # 🔹 Remove email addresses
             text = re.sub(r'\S+@\S+', '', text)
 
+            # Fix hyphen line breaks (e.g., unright- eousness)
+            text = re.sub(r'-\s+', '', text)
+
+            # Remove stray brackets
+            text = re.sub(r'[()]', '', text)
+
             # Remove anything inside brackets
             text = re.sub(r'\(.*?\)', '', text)
 
