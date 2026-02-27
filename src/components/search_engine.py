@@ -3,22 +3,23 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from src.logger.logger import logging
 from src.exception import CustomException
-
+from src.config.configuration import config
 
 class SearchEngine:
     """
     Performs semantic search using TF-IDF + Cosine Similarity
     """
 
-    def __init__(self, index: dict):
+    def __init__(self, index: dict,top_k=None):
+        self.top_k = config.DEFAULT_TOP_K
         self.vectorizer = index["vectorizer"]
         self.tfidf_matrix = index["matrix"]
         self.documents = index["documents"]
 
-    def search(self, query: str, top_k: int = 5):
+    def search(self, query: str, top_k=None):
         try:
             logging.info(f"Searching for query: {query}")
-
+            top_k=self.top_k
             # 1️⃣ Transform query into vector
             query_vector = self.vectorizer.transform([query])
 

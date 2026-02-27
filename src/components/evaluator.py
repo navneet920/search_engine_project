@@ -1,43 +1,50 @@
 import numpy as np
 
-
+from src.config.configuration import config
 class Evaluator:
-    """
-    Evaluates search results using:
-    - Precision@K
-    - Recall@K
-    - MRR
-    """
 
-    @staticmethod
-    def precision_at_k(results, relevant_docs, k):
+    def __init__(self, pipeline,top_k=None):
         """
-        results: list of search result dicts
-        relevant_docs: list of relevant verse_ids
+        pipeline = SearchPipeline instance
         """
-        retrieved_k = results[:k]
-        retrieved_ids = [r["verse_id"] for r in retrieved_k]
+        self.pipeline = pipeline
+        self.top_k=config.DEFAULT_TOP_K
 
-        relevant_retrieved = len(set(retrieved_ids) & set(relevant_docs))
+    def evaluate(self, ground_truth, top_k=None):
+        top_k=self.top_k
+        precision_scores = []
+        recall_scores = []
+        reciprocal_ranks = []
 
-        return relevant_retrieved / k
+        for query, relevant_docs in ground_truth.items():
 
-    @staticmethod
-    def recall_at_k(results, relevant_docs, k):
-        retrieved_k = results[:k]
-        retrieved_ids = [r["verse_id"] for r in retrieved_k]
+            results = self.pipeline.run(query, top_k=top_k)
 
-        relevant_retrieved = len(set(retrieved_ids) & set(relevant_docs))
+            retrieved_ids = [r["verse_id"] for r in results]
 
-        return relevant_retrieved / len(relevant_docs)
+            # --- Precision@K ---
+            relevant_retrieved = [
+                doc for doc in retrieved_ids if doc in relevant_docs
+            ]
 
-    @staticmethod
-    def mean_reciprocal_rank(results, relevant_docs):
-        """
-        MRR = 1 / rank of first relevant document
-        """
-        for idx, result in enumerate(results):
-            if result["verse_id"] in relevant_docs:
-                return 1 / (idx + 1)
+            precision = len(relevant_retrieved) / top_k
+            precision_scores.append(precision)
 
-        return 0.0
+            # --- Recall@K ---
+            recall = len(relevant_retrieved) / len(relevant_docs)
+            recall_scores.append(recall)
+
+            # --- MRR ---
+            rr = 0
+            for rank, doc_id in enumerate(retrieved_ids):
+                if doc_id in relevant_docs:
+                    rr = 1 / (rank + 1)
+                    break
+
+            reciprocal_ranks.append(rr)
+
+        return {
+            "Precision@{}".format(top_k): np.mean(precision_scores),
+            "Recall@{}".format(top_k): np.mean(recall_scores),
+            "MRR": np.mean(reciprocal_ranks)
+        }

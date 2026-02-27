@@ -5,11 +5,12 @@ import sys
 from sklearn.feature_extraction.text import TfidfVectorizer
 from src.logger.logger import logging
 from src.exception import CustomException
-
+from src.config.configuration import config
 
 class TFIDFVectorizer:
 
-    def __init__(self, max_features=5000):
+    def __init__(self, max_features=5000,artifacts_path=None):
+        self.artifacts_path=config.ARTIFACTS_PATH
         self.vectorizer = TfidfVectorizer(
             max_features=max_features,
             ngram_range=(1, 3),   # unigrams + bigrams
@@ -37,11 +38,12 @@ class TFIDFVectorizer:
         """
         return self.vectorizer.transform([query])
 
-    def save(self, artifacts_path="artifacts"):
+    def save(self, artifacts_path=None):
         """
         Save vectorizer and matrix
         """
         try:
+            artifacts_path=config.ARTIFACTS_PATH
             os.makedirs(artifacts_path, exist_ok=True)
 
             with open(os.path.join(artifacts_path, "vectorizer.pkl"), "wb") as f:
@@ -57,10 +59,11 @@ class TFIDFVectorizer:
             raise CustomException(e, sys)
 
     @staticmethod
-    def load(artifacts_path="artifacts"):
+    def load(artifacts_path=None):
         """
         Load saved vectorizer and matrix
         """
+        artifacts_path=config.ARTIFACTS_PATH
         with open(os.path.join(artifacts_path, "vectorizer.pkl"), "rb") as f:
             vectorizer = pickle.load(f)
 

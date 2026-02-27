@@ -4,7 +4,7 @@ import sys
 from src.utils.storage import Storage
 from src.logger.logger import logging
 from src.exception import CustomException
-
+from src.config.configuration import config
 
 class IndexBuilder:
     """
@@ -14,8 +14,8 @@ class IndexBuilder:
     - chunks.json
     """
 
-    def __init__(self, artifacts_path="artifacts"):
-        self.artifacts_path = artifacts_path
+    def __init__(self, artifacts_path=None):
+        self.artifacts_path = config.ARTIFACTS_PATH
         self.vectorizer = None
         self.tfidf_matrix = None
         self.documents = None
