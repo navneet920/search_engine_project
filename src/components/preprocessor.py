@@ -3,8 +3,16 @@ from src.logger.logger import logging
 from src.exception import CustomException
 import sys
 
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
 
 class Preprocessor:
+    def __init__(self):
+        self.stop_words = set(stopwords.words("english"))
+        self.lemmatizer = WordNetLemmatizer()
 
     def clean_text(self, text: str) -> str:
         """
@@ -33,6 +41,20 @@ class Preprocessor:
 
             # Convert to lowercase
             text = text.lower()
+
+            #  Tokenization
+            tokens = word_tokenize(text)
+
+            # Stopword removal
+            tokens = [word for word in tokens if word not in self.stop_words]
+
+            #  Lemmatization
+            tokens = [self.lemmatizer.lemmatize(word) for word in tokens]
+
+            #  Remove short tokens
+            tokens = [word for word in tokens if len(word) > 2]
+
+            cleaned_text = " ".join(tokens)
 
             logging.info("Text cleaning completed.")
             return text.strip()

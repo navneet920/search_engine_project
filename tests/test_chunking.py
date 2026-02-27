@@ -38,4 +38,4 @@ if __name__ == "__main__":
 
     if chunks:
         print("First verse:")
-        print(chunks[0])
+        print(chunks[0:10])
