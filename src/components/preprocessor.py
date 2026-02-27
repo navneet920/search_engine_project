@@ -21,11 +21,23 @@ class Preprocessor:
         try:
             logging.info("Starting text cleaning process.")
 
+            # Remove chapter summary
+            text = re.sub(r'chapter summary.*?(?=\d+\.\d+|$)', '', text, flags=re.IGNORECASE | re.DOTALL)
+
+            # Remove NOTE blocks
+            text = re.sub(r'note:.*?(?=\d+\.\d+|$)', '', text, flags=re.IGNORECASE | re.DOTALL)
+
             # 🔹 Remove URLs (http, https, www)
             text = re.sub(r'http\S+|www\.\S+', '', text)
 
             # 🔹 Remove email addresses
             text = re.sub(r'\S+@\S+', '', text)
+
+            # Remove anything inside brackets
+            text = re.sub(r'\(.*?\)', '', text)
+
+            # Remove non-letters
+            text = re.sub(r'[^a-zA-Z\s]', ' ', text)
 
             # Remove page numbers like "Page 1"
             text = re.sub(r'Page\s+\d+', '', text)
