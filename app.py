@@ -1,54 +1,48 @@
 import streamlit as st
 import requests
+import re
 
-# 🔗 Change this if deploying backend
 API_URL = "http://127.0.0.1:8000/search"
 
 st.set_page_config(
-    page_title="Bhagavad Gita Search",
+    page_title="Bhagavad Gita AI",
     page_icon="📖",
     layout="centered"
 )
 
-st.title("📖 Bhagavad Gita Semantic Search")
-st.markdown("Ask any question related to the Bhagavad Gita.")
+st.title("📖 Bhagavad Gita AI")
 
-query = st.text_input("Enter your question:")
+# Chat input (no history stored)
+if prompt := st.chat_input("Ask something about Bhagavad Gita..."):
 
-if st.button("Search"):
+    # Show user message
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-    if not query.strip():
-        st.warning("Please enter a valid question.")
-    else:
-        with st.spinner("Searching..."):
+    # Assistant response
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
 
             try:
                 response = requests.post(
                     API_URL,
-                    json={"query": query},
-                    timeout=10
+                    json={"query": prompt},
+
                 )
 
                 if response.status_code == 200:
                     results = response.json()
 
-                    if not results:
-                        st.info("No results found.")
+                    if results:
+                        for i, r in enumerate(results, 1):
+                            clean_text=re.sub(r'[()]','',r["content"])
+                            st.write(clean_text)
+                            st.divider()
                     else:
-                        st.success("Top 2 Results:")
-                        st.balloons()
-
-                        for i, result in enumerate(results, 1):
-                            with st.container():
-                                st.markdown(f"### 🔎 Result {i}")
-                                st.info(result["content"])
-                                st.divider()
+                        st.write("No relevant verses found.")
 
                 else:
-                    st.error(f"API Error: {response.json().get('detail')}")
-
-            except requests.exceptions.ConnectionError:
-                st.error("Cannot connect to backend. Make sure FastAPI is running.")
+                    st.write("API error occurred.")
 
             except Exception as e:
-                st.error("Something went wrong.")
+                st.write(f"Connection error: {e}")
