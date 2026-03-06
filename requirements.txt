@@ -7,4 +7,4 @@ sentence-transformers
 fastapi
 uvicorn
 pydantic
-streamlit
+boto3
