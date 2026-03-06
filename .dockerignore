@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+senv/
+
+
+# Logs
+logs/
+*.log
+
+# Data
+data/
+
+# Artifacts
+artifacts/
+*.pkl
+*.json
+
+# Research
+research/
+*.ipynb
+
+# Tests
+tests/
+test_pdf_pipeline.py
+
+# Documentation
+README.md
+LICENSE
+
+# Build
+build/
+dist/
+*.egg-info
+

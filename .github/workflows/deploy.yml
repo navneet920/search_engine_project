@@ -35,4 +35,4 @@ jobs:
           docker stop gita-app || true
           docker rm gita-app || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/gita-ai:latest
-          docker run -d -p 8000:8000 --name gita-app ${{ secrets.DOCKER_USERNAME }}/gita-ai:latest
+          docker run -d -p 8000:8000 --name gita-app ${{ secrets.DOCKER_USERNAME }}/gita-ai:latests
