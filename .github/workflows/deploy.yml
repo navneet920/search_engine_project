@@ -8,7 +8,7 @@ branches:
 jobs:
 deploy:
 
-```
+
 runs-on: ubuntu-latest
 
 steps:
@@ -49,4 +49,4 @@ steps:
         -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY }} \
         -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_KEY }} \
         ${{ secrets.DOCKER_USERNAME }}/geeta-ai:latest
-```
+
