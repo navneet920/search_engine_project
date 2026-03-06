@@ -7,4 +7,3 @@ sentence-transformers
 fastapi
 uvicorn
 pydantic
-boto3
