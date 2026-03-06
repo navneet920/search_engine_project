@@ -10,7 +10,6 @@ __pycache__/
 # Virtual environments
 senv/
 
-
 # Logs
 logs/
 *.log
