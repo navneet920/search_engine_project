@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+.env
+
+# virtual env
+venv/
+senv/
 # Distribution / packaging
 .Python
 build/
@@ -24,6 +29,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
 MANIFEST
 
 # PyInstaller

@@ -15,6 +15,11 @@ class EmbeddingModel:
     def __init__(self, model_name=None):
         self.model_name=config.EMBEDDING_MODEL_NAME
         self.model = SentenceTransformer(self.model_name)
+        # Load model with optional HuggingFace token
+        self.model = SentenceTransformer(
+            self.model_name,
+            token=config.HF_TOKEN
+        )
         self.embeddings = None
 
     def encode_documents(self, documents: list):

@@ -1,5 +1,6 @@
 import os
-
+from dotenv import load_dotenv
+load_dotenv()
 
 class Config:
 
@@ -15,10 +16,12 @@ class Config:
         self.HYBRID_ALPHA = 0.5
 
         # -------- Embeddings --------
-        self.EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+        self.EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
         # -------- Evaluation --------
         self.EVAL_TOP_K = 5
+        #---------- HF-TOKEN--------
+        self.HF_Token=os.getenv(HF_KEY)
 
 
 # Global config object
